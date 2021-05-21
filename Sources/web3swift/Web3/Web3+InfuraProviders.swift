@@ -244,7 +244,7 @@ public final class InfuraWebsocketProvider: WebsocketProvider {
     
     override public func websocketDidReceiveMessage(socket: WebSocketClient, text: String) {
         if let data = text.data(using: String.Encoding.utf8),
-            let dictionary = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+            let d = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any], let dictionary = d {
             if filterID == nil,
                 let result = dictionary["result"] as? String {
                 // setting filter id

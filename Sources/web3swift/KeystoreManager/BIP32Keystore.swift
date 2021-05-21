@@ -36,7 +36,7 @@ public class BIP32Keystore: AbstractKeystore {
 
     public func UNSAFE_getPrivateKeyData(password: String, account: EthereumAddress) throws -> Data {
         if let key = self.paths.keyForValue(value: account) {
-            guard let decryptedRootNode = try? self.getPrefixNodeData(password) else {
+            guard let d = try? self.getPrefixNodeData(password), let decryptedRootNode = d else {
                 throw AbstractKeystoreError.encryptionError("Failed to decrypt a keystore")
             }
             guard let rootNode = HDNode(decryptedRootNode) else {
@@ -117,7 +117,7 @@ public class BIP32Keystore: AbstractKeystore {
     }
 
     public func createNewChildAccount(password: String = "web3swift") throws {
-        guard let decryptedRootNode = try? self.getPrefixNodeData(password) else {
+        guard let d = try? self.getPrefixNodeData(password), let decryptedRootNode = d else {
             throw AbstractKeystoreError.encryptionError("Failed to decrypt a keystore")
         }
         guard let rootNode = HDNode(decryptedRootNode) else {
@@ -160,7 +160,7 @@ public class BIP32Keystore: AbstractKeystore {
         paths[newPath] = newAddress
     }
 
-    public func createNewCustomChildAccount(password: String = "web3swift", path: String) throws {guard let decryptedRootNode = try? self.getPrefixNodeData(password) else {
+    public func createNewCustomChildAccount(password: String = "web3swift", path: String) throws {guard let d = try? self.getPrefixNodeData(password), let decryptedRootNode = d else {
             throw AbstractKeystoreError.encryptionError("Failed to decrypt a keystore")
         }
         guard let rootNode = HDNode(decryptedRootNode) else {
@@ -387,7 +387,7 @@ public class BIP32Keystore: AbstractKeystore {
     }
 
     public func serializeRootNodeToString(password: String = "web3swift") throws -> String {
-        guard let decryptedRootNode = try? self.getPrefixNodeData(password) else {
+        guard let d = try? self.getPrefixNodeData(password), let decryptedRootNode = d else {
             throw AbstractKeystoreError.encryptionError("Failed to decrypt a keystore")
         }
         guard let rootNode = HDNode(decryptedRootNode) else {
